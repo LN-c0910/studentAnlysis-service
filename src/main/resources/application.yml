@@ -1,0 +1,18 @@
+server:
+  port: 7777
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///test2020?useUnicode=true&characterEncoding=utf8&userSSL=false&serverTimezone=GMT
+    username: root
+    password: qq6168058
+  http:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+mybatis:
+  type-aliases-package: cn.csust.lingyi.pojo
+logging:
+  level:
+    cn.csust.lingyi.mapper: debug
