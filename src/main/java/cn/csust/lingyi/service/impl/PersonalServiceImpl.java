@@ -6,6 +6,7 @@ import cn.csust.lingyi.common.utils.Utils;
 import cn.csust.lingyi.mapper.*;
 import cn.csust.lingyi.pojo.*;
 import cn.csust.lingyi.service.PersonalService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +51,97 @@ public class PersonalServiceImpl implements PersonalService {
     @Autowired
     StudentMapper studentMapper;
 
+
+    /**
+     *
+     * @param sno 学号
+     * @return 学生描述列表
+     */
+    @Override
+    public List<String> getDescriptionList(String sno){
+        ArrayList<String> descriptionList = new ArrayList<>();
+        //奖励信息
+        List<Jl> jls = this.jlMapper.select(new Jl(sno));
+        if (!CollectionUtils.isEmpty(jls)) {
+            jls.forEach(jl -> {
+                if (jl.getJlname() != null){
+                    descriptionList.add(jl.getJlname());
+                }
+            });
+        }
+        //扣分信息
+        List<Persondeduction> persondeductions = this.persondeductionMapper.queryDeductionsBySno(sno);
+        if (!CollectionUtils.isEmpty(persondeductions)) {
+            persondeductions.forEach(persondeduction -> {
+                if (persondeduction.getDname() != null){
+                    descriptionList.add(persondeduction.getDname());
+                }
+            });
+        }
+        //成绩最高三科
+        List<Personknowledge> personknowledges = this.courseMapper.queryCourseScoresBySno(sno, "0", 3);
+        if (!CollectionUtils.isEmpty(personknowledges)) {
+            personknowledges.forEach(personknowledge -> {
+                if (personknowledge.getCname()!=null){
+                    descriptionList.add(personknowledge.getCname());
+                }
+            });
+        }
+        //德育加分项
+        List<Personmoral> personmorals = this.personmoralMapper.select(new Personmoral(sno));
+        if (!CollectionUtils.isEmpty(personmorals)) {
+            personmorals.forEach(personmoral -> {
+                if (personmoral.getName() != null){
+                    descriptionList.add(personmoral.getName());
+                }
+            });
+        }
+        //实践项
+        List<Practice> practices = this.practiceMapper.select(new Practice(sno));
+        if (!CollectionUtils.isEmpty(practices)) {
+            practices.forEach(practice -> {
+                if (practice.getPracticename() != null){
+                    descriptionList.add(practice.getPracticename());
+                }
+            });
+        }
+        //惩罚项
+        List<Punish> punishes = this.punishMapper.select(new Punish(sno));
+        if (!CollectionUtils.isEmpty(punishes)){
+            punishes.forEach(punish -> {
+                if (punish.getPunishreason()!=null){
+                    descriptionList.add(punish.getPunishreason());
+                }
+            });
+        }
+        //技能证书
+        List<Skill> skills = this.skillMapper.select(new Skill(sno));
+        if (!CollectionUtils.isEmpty(skills)){
+            skills.forEach(skill -> {
+                if (skill.getSkillname()!=null){
+                    descriptionList.add(skill.getSkillname());
+                }
+            });
+        }
+        //讲座记录
+        List<String> lectureNames = this.registrationMapper.queryLectureNameBySno(sno);
+        if (!CollectionUtils.isEmpty(lectureNames)){
+            lectureNames.forEach(s -> {
+                if (s != null) {
+                    descriptionList.add(s);
+                }
+            });
+        }
+        //特长信息
+        Student student = new Student();
+        student.setStudentno(sno);
+        Student student1 = this.studentMapper.selectOne(student);
+        if (student1.getTc() != null) {
+            descriptionList.add(student1.getTc());
+        }
+        return descriptionList;
+    }
+
     @Override
     public List<Personknowledge> queryCourseScoresBySno(String sno,String xuenian,Integer limit) {
         return this.courseMapper.queryCourseScoresBySno(sno, xuenian,limit);
@@ -77,7 +169,7 @@ public class PersonalServiceImpl implements PersonalService {
     /**
      *
      * @param sno 学号
-     * @return  获取学生相关词条分词结果  [{name:xx,value:xx},..]
+     * @return  获取学生相关词条分词结果的词云图路径  [{name:xx,value:xx},..]
      */
     @Override
     public String queryDescrBySno(String sno) {
@@ -85,61 +177,12 @@ public class PersonalServiceImpl implements PersonalService {
         if (init == null){
             return "static/blank.png";
         }
-        ArrayList<String> stulist = new ArrayList<>();
-        //奖励信息
-        List<Jl> jls = this.jlMapper.select(new Jl(sno));
-        if (!CollectionUtils.isEmpty(jls)) {
-            jls.forEach(jl -> stulist.add(jl.getJlname()));
-        }
-        //扣分信息
-        List<Persondeduction> persondeductions = this.persondeductionMapper.queryDeductionsBySno(sno);
-        if (!CollectionUtils.isEmpty(persondeductions)) {
-            persondeductions.forEach(persondeduction -> stulist.add(persondeduction.getDname()));
-        }
-        //成绩最高五科
-        List<Personknowledge> personknowledges = this.courseMapper.queryCourseScoresBySno(sno, "0", 5);
-        if (!CollectionUtils.isEmpty(personknowledges)) {
-            personknowledges.forEach(personknowledge -> stulist.add(personknowledge.getCname()));
-        }
-        //德育加分项
-        List<Personmoral> personmorals = this.personmoralMapper.select(new Personmoral(sno));
-        if (!CollectionUtils.isEmpty(personmorals)) {
-            personmorals.forEach(personmoral -> stulist.add(personmoral.getName()));
-        }
-        //实践项
-        List<Practice> practices = this.practiceMapper.select(new Practice(sno));
-        if (!CollectionUtils.isEmpty(practices)) {
-            practices.forEach(practice -> stulist.add(practice.getPracticename()));
-        }
-        //惩罚项
-        List<Punish> punishes = this.punishMapper.select(new Punish(sno));
-        if (!CollectionUtils.isEmpty(punishes)){
-            punishes.forEach(punish -> stulist.add(punish.getPunishreason()));
-        }
-
-
-        //技能证书
-        List<Skill> skills = this.skillMapper.select(new Skill(sno));
-        if (!CollectionUtils.isEmpty(skills)){
-            skills.forEach(skill -> stulist.add(skill.getSkillname()));
-        }
-
-        //讲座记录
-        List<String> lectureNames = this.registrationMapper.queryLectureNameBySno(sno);
-        if (!CollectionUtils.isEmpty(lectureNames)){
-            lectureNames.forEach(s -> stulist.add(s));
-        }
-
-        //特长信息
-        Student student = new Student();
-        student.setStudentno(sno);
-        Student student1 = this.studentMapper.selectOne(student);
-        stulist.add(student1.getTc());
-        if (stulist.size() < 5){
+        List<String> descriptionList = getDescriptionList(sno);
+        if (descriptionList.size() < 5){
             return "static/word_list_too_short.png";
         }
         Map<String, List<String>> map = new HashMap<>();
-        map.put("data", stulist);
+        map.put("data", descriptionList);
         ResultVo resultVo = Utils.sendPost(Utils.DATA_PROCESSING_URL+"/stuwordcloud", map);
         if (resultVo.getCode() == 500){
             return "static/create_failed.png";
@@ -233,5 +276,82 @@ public class PersonalServiceImpl implements PersonalService {
     public Integer queryRankBySnoAndXuenian(String sno, String xuenian) {
 
         return this.courseMapper.queryRankBySnoAndXuenian(sno, xuenian);
+    }
+
+    /**
+     * 根据学年范围，学号查询学生奖励记录
+     * @param sno 学号
+     * @param syear 整数，年份
+     * @param eyear 整数，年份
+     * @return
+     */
+    @Override
+    public List<Jl> queryJlBySno(String sno,Integer syear,Integer eyear) {
+
+        if (syear == null || eyear == null){
+            return this.jlMapper.queryJlBySnoAndXuenian(sno, null, null);
+        }
+        //若开始学年与结束学年不为空，拼接时间字符串 (一个学年范围：yyyy-09-01-yyyy-08-31)
+        String sTime = syear + "-9-1";
+        String eTime = eyear + "-8-31";
+        List<Jl> jls = this.jlMapper.queryJlBySnoAndXuenian(sno, sTime, eTime);
+        return jls;
+    }
+
+    /**
+     * 根据学年范围查询惩罚记录
+     * @param sno
+     * @param syear
+     * @param eyear
+     * @return 惩罚记录
+     */
+    @Override
+    public List<Punish> queryPunishBySno(String sno,Integer syear,Integer eyear) {
+        if (syear == null || eyear == null){
+            return this.punishMapper.queryPunishBySnoandXuenian(sno, null, null);
+        }
+        //若开始学年与结束学年不为空，拼接时间字符串 (一个学年范围：yyyy-09-01-yyyy-08-31)
+        String sTime = syear + "-9-1";
+        String eTime = eyear + "-8-31";
+        List<Punish> punishes = this.punishMapper.queryPunishBySnoandXuenian(sno, sTime, eTime);
+        return punishes;
+    }
+
+    /**
+     *
+     * @param sno
+     * @param syear
+     * @param eyear
+     * @return 技能记录
+     */
+    @Override
+    public List<Skill> querySkillsBySno(String sno,Integer syear,Integer eyear) {
+        if (syear == null || eyear == null){
+            return this.skillMapper.querySkillBySnoAndXuenian(sno, null, null);
+        }
+        //若开始学年与结束学年不为空，拼接时间字符串 (一个学年范围：yyyy-09-01-yyyy-08-31)
+        String sTime = syear + "-9-1";
+        String eTime = eyear + "-8-31";
+        List<Skill> skills = this.skillMapper.querySkillBySnoAndXuenian(sno,sTime,eTime);
+        return skills;
+    }
+
+    /**
+     *
+     * @param sno
+     * @param syear
+     * @param eyear
+     * @return 实践记录，按开始时间计算 降序
+     */
+    @Override
+    public List<Practice> queryPracticeBySno(String sno,Integer syear,Integer eyear) {
+        if (syear == null || eyear == null){
+            return this.practiceMapper.queryPracticeBySnoAndXuenian(sno, null, null);
+        }
+        //若开始学年与结束学年不为空，拼接时间字符串 (一个学年范围：yyyy-09-01-yyyy-08-31)
+        String sTime = syear + "-9-1";
+        String eTime = eyear + "-8-31";
+        List<Practice> practices = this.practiceMapper.queryPracticeBySnoAndXuenian(sno,sTime,eTime);
+        return practices;
     }
 }

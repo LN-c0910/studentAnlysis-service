@@ -9,15 +9,16 @@ import java.util.List;
 
 /**
  * Created by Enzo Cotter on 2020/3/18.
+ * @author linan
  */
 public interface CourseMapper extends Mapper<Personknowledge> {
 
     /**
-     *  //查询学生科目成绩
+     *  查询学生科目成绩
      * @param sno String 学号
-     * @param xuenian String 学年 ,xuenian为"0",不将xuenian作为查询条件
+     * @param xuenian String 学年 ,xuenian为"0",不将xuenian作为查询条件 即查询所有记录
      * @param limit 限制查询条数
-     * @return
+     * @return 返回学生科目成绩列表
      */
     @Select("SELECT\n" +
             "  ps.studentNo,\n" +
@@ -67,27 +68,37 @@ public interface CourseMapper extends Mapper<Personknowledge> {
 
     /**
      * 查询学生某学年挂科数
-     * @param sno
-     * @param xuenian
+     * @param sno 学号
+     * @param xuenian 学年
      * @return 学生某学年挂科数
      */
     @Select("select count(*) from course as c inner join personknowledge as pd where c.Id=pd.cid and c.xuenian=#{xuenian} and pd.studentNo=#{sno} and score <> -1 and score < 60")
     Integer queryfailsBySnoAndXuenian(@Param("sno") String sno,@Param("xuenian")String xuenian);
 
     /**
-     *
-     * @param sno
-     * @param xuenian
+     * 根据学号 学年 查询学生在某学年用于计算综测成绩的课程数(不包括公共选修课)
+     * @param sno 学号
+     * @param xuenian 学年
      * @return 学生某学年课程数
      */
     @Select("select count(*) from course as c inner join personknowledge as pd where c.Id=pd.cid and c.xuenian=#{xuenian} and pd.studentNo=#{sno} and score <> -1")
     Integer queryCourseCountsBySnoAndXuenian(@Param("sno") String sno,@Param("xuenian") String xuenian);
 
+    /**
+     * 根据课程id 学号返回课程成绩
+     * @param cid 课程id
+     * @param sno 学号
+     * @return 根据课程id 学号返回课程成绩
+     */
     @Select("select c.courseName as cname,ps.score from course as c inner join personknowledge as ps where c.Id = ps.cid and ps.cid=#{cid} and ps.studentNo=#{sno}")
     List<Personknowledge> queryCourseByCid(@Param("cid") Long cid,@Param("sno") String sno);
 
+
     /**
      * 根据学号 学年查询综测专业排名
+     * @param sno 学号
+     * @param xuenian 学年
+     * @return 排名
      */
     @Select("SELECT rowNo FROM (SELECT studentNo,(@rowNum:=@rowNum+1) AS rowNo\n" +
             "               FROM (\n" +

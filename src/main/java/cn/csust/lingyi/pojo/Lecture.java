@@ -30,8 +30,7 @@ public class Lecture {
     //优先级
         private Integer priority;
 
-    public Lecture() {
-    }
+    public Lecture() {}
 
     public String getXuenian() {
         return xuenian;

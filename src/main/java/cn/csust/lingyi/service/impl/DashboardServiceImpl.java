@@ -1,5 +1,6 @@
 package cn.csust.lingyi.service.impl;
 
+import cn.csust.lingyi.bo.AddressCount;
 import cn.csust.lingyi.bo.Nation;
 import cn.csust.lingyi.bo.PoliticalStatus;
 import cn.csust.lingyi.common.VO.ResultVo;
@@ -168,6 +169,9 @@ public class DashboardServiceImpl implements DashboardService {
         List<PoliticalStatus> pscount = this.studentMapper.pscount();
         List<PoliticalStatus> allpscount = this.studentMapper.allpscount();
         boolean b = pscount.addAll(allpscount);
+        if (!b) {
+            return null;
+        }
         return pscount;
     }
 
@@ -178,18 +182,20 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public String stuMap() {
         List<String> address = this.studentMapper.queryAddress();
-        Map<String, String> map = new HashMap<>();
-        map.put("data", address.toString());
+        Map<String, List<String> > map = new HashMap<>();
+        map.put("data", address);
         System.out.println(map);
         ResultVo resultVo = Utils.sendPost(Utils.DATA_PROCESSING_URL+"/addressMap", map);
         if (resultVo == null){
             return "数据处理服务器错误";
+//            return null;
         }
         if (resultVo.getCode() == 404){
             return "暂无记录";
+//            return null;
         }
-        Object data = resultVo.getData();
-        return data.toString();
+        return resultVo.getData().toString();
+//        return data.toString();
     }
 
 

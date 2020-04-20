@@ -1,15 +1,16 @@
 package cn.csust.lingyi;
 
-import cn.csust.lingyi.bo.AddressCount;
-import cn.csust.lingyi.bo.Nation;
+import cn.csust.lingyi.bo.*;
+import cn.csust.lingyi.common.VO.PageResult;
 import cn.csust.lingyi.common.VO.ResultVo;
 import cn.csust.lingyi.common.utils.Utils;
 import cn.csust.lingyi.mapper.CourseMapper;
 import cn.csust.lingyi.mapper.StudentMapper;
-import cn.csust.lingyi.pojo.Personknowledge;
-import cn.csust.lingyi.pojo.Student;
+import cn.csust.lingyi.pojo.*;
+import cn.csust.lingyi.service.ClassesService;
 import cn.csust.lingyi.service.DashboardService;
 import cn.csust.lingyi.service.PersonalService;
+import cn.csust.lingyi.service.impl.ClassesServiceImpl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import tk.mybatis.mapper.entity.Example;
 
 import javax.xml.ws.http.HTTPException;
 import java.net.HttpURLConnection;
@@ -41,6 +43,11 @@ class AnalysisApplicationTests {
 
 	@Autowired
 	PersonalService personalService;
+
+	@Autowired
+	ClassesService classesService;
+
+
 	@Test
 	void contextLoads() {
 		Student student = new Student();
@@ -147,4 +154,33 @@ class AnalysisApplicationTests {
 
 	}
 
+	@Test
+	void testClassService(){
+		Double R = this.classesService.queryCET4or6PassRate("2018", "信息管理与信息系统", 1, SkillType.CET6);
+		System.out.println(R);
+	}
+
+	@Test
+	void querySizeByClassTest(){
+//		Integer sizeByClass = this.classesService.querySexByClass(SexEnum.FEMALE,"2019", "会计",null);
+//		List<Nation> map = this.classesService.queryNationByClass("2019", "会计", null);
+//		List<PoliticalStatus> politicalStatuses = this.classesService.queryPoliticalStatusByClass("2018", "会计", 1);
+//		List<String> strings = this.classesService.queryProvinceByClass("2018", "会计", 1);
+
+//		List<Nation> nations = new ArrayList<>();
+//		map.forEach((v,k) -> {
+//			nations.add(new Nation(v,k));
+//
+//		});
+//		PageResult<Student> pageResult = this.classesService.queryStudentByClass("2018", "会计", 1, 1, 5);
+//		Integer pageResult = this.classesService.avgScoreRankOfClass("2018","2018-2019" ,"金融", 2 );
+//		System.out.println(pageResult);
+		//添加查询条件
+		String cloud = this.classesService.getClassDescriptionWorldCloud("2018", "信息管理与信息系统", 2);
+		System.out.println(cloud);
+//		List<PoliticalStatus> pscount = this.dashboardService.pscount();
+//		System.out.println(pscount);
+
+
+	}
 }

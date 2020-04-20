@@ -1,4 +1,5 @@
 package cn.csust.lingyi.pojo;
+
 import javax.persistence.*;
 
 /**
@@ -8,8 +9,33 @@ import javax.persistence.*;
  * @since 2020-03-19 17:19:15
  */
 @Entity
-@Table(name="personsummary")
+@Table(name = "personsummary")
 public class Personsummary {
+    @javax.persistence.Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long Id;
+    private String xuenian;
+    private String studentno;
+    private Double moral;
+    private Double knowledge;
+    private Double sports;
+    private Double deduction;
+    private Integer fails;
+    private String bz;
+    private Integer status;
+    private Integer tban;
+    /**
+     * 学生姓名
+     */
+    @Transient
+    private String stuName;
+
+    public Personsummary() {}
+    public Personsummary(String studentno) {
+        this.studentno = studentno;
+    }
+
+
     public Long getId() {
         return Id;
     }
@@ -17,31 +43,6 @@ public class Personsummary {
     public void setId(Long id) {
         Id = id;
     }
-
-    @javax.persistence.Id
-
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long Id;
-        private String xuenian;
-        private String studentno;
-        private Double moral;
-
-    public Personsummary(String studentno) {
-        this.studentno = studentno;
-    }
-
-    public Personsummary() {
-
-    }
-
-    private Double knowledge;
-        private Double sports;
-        private Double deduction;
-        private Integer fails;
-        private String bz;
-        private Integer status;
-        private Integer tban;
-
     public String getXuenian() {
         return xuenian;
     }
@@ -120,5 +121,31 @@ public class Personsummary {
 
     public void setTban(Integer tban) {
         this.tban = tban;
+    }
+
+    public String getStuName() {
+        return stuName;
+    }
+
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
+    }
+
+    @Override
+    public String toString() {
+        return "Personsummary{" +
+                "Id=" + Id +
+                ", xuenian='" + xuenian + '\'' +
+                ", studentno='" + studentno + '\'' +
+                ", moral=" + moral +
+                ", knowledge=" + knowledge +
+                ", sports=" + sports +
+                ", deduction=" + deduction +
+                ", fails=" + fails +
+                ", bz='" + bz + '\'' +
+                ", status=" + status +
+                ", tban=" + tban +
+                ", stuName='" + stuName + '\'' +
+                '}';
     }
 }

@@ -1,10 +1,10 @@
 package cn.csust.lingyi.service;
 
 import cn.csust.lingyi.common.VO.RespData;
-import cn.csust.lingyi.pojo.Personknowledge;
-import cn.csust.lingyi.pojo.Student;
+import cn.csust.lingyi.pojo.*;
 import org.omg.PortableServer.LIFESPAN_POLICY_ID;
 
+import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +12,9 @@ import java.util.Map;
  * Created by Enzo Cotter on 2020/3/18.
  */
 public interface PersonalService {
+    //学生描述列表
+    List<String> getDescriptionList(String sno);
+
     //获取学生某个学期的科目成绩
     List<Personknowledge> queryCourseScoresBySno(String sno,String xuenian,Integer limit);
 
@@ -38,4 +41,16 @@ public interface PersonalService {
 
     //获取综测专业排名
     Integer queryRankBySnoAndXuenian(String sno,String xuenian);
+
+    //获取奖励信息
+    List<Jl> queryJlBySno(String sno,Integer syear,Integer eyear);
+
+    //获取惩罚信息
+    List<Punish> queryPunishBySno(String sno,Integer syear,Integer eyear);
+
+    //获取技能信息
+    List<Skill> querySkillsBySno(String sno,Integer syear,Integer eyear);
+
+    //获取实践信息
+    List<Practice> queryPracticeBySno(String sno,Integer syear,Integer eyear);
 }

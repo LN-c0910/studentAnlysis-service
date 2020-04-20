@@ -19,8 +19,7 @@ public class Persondeduction {
         private Integer times;
         @Transient
         private String dname;
-    public Persondeduction() {
-    }
+    public Persondeduction() {}
     public Persondeduction(String studentno) {
         this.studentno = studentno;
     }

@@ -1,5 +1,6 @@
 package cn.csust.lingyi.service;
 
+import cn.csust.lingyi.bo.AddressCount;
 import cn.csust.lingyi.bo.PoliticalStatus;
 
 import java.util.List;

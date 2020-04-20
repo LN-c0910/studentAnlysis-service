@@ -11,8 +11,17 @@ spring:
       charset: UTF-8
       force: true
       enabled: true
+#  application:
+#    name: anlysis-service
 mybatis:
   type-aliases-package: cn.csust.lingyi.pojo
 logging:
   level:
     cn.csust.lingyi.mapper: debug
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: http://localhost:10086/eureka
+#  instance:
+#    lease-expiration-duration-in-seconds: 15
+#    lease-renewal-interval-in-seconds: 5

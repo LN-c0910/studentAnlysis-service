@@ -1,5 +1,6 @@
 package cn.csust.lingyi.controller;
 
+import cn.csust.lingyi.bo.AddressCount;
 import cn.csust.lingyi.bo.PoliticalStatus;
 import cn.csust.lingyi.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,9 @@ public class DashboardController {
     @GetMapping("ps")
     public ResponseEntity<List<PoliticalStatus>> pscount(){
         List<PoliticalStatus> pscount = this.dashboardService.pscount();
+        if (CollectionUtils.isEmpty(pscount)){
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(pscount);
     }
 

@@ -17,16 +17,25 @@ public class Personknowledge {
     private String studentno;
     private Integer cid;
     private Integer score;
-    //课程名
+    /**
+     * 课程名
+     */
     @Transient
     private String cname;
-    //学生姓名
+    /**
+     *  学生姓名
+     */
     @Transient
     private String sname;
-    //绩点
+    /**
+     * 绩点
+     */
     @Transient
     private Float jd;
 
+    /**
+     * 学分
+     */
     @Transient
     private Double credit;
 
@@ -35,8 +44,7 @@ public class Personknowledge {
         this.studentno = studentNo;
     }
 
-    public Personknowledge() {
-    }
+    public Personknowledge() {}
 
     public Double getCredit() {
         return credit;

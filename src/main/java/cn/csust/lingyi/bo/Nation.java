@@ -7,6 +7,14 @@ public class Nation {
     private String mzname;
     private Integer mznumber;
 
+    public Nation() {
+    }
+
+    public Nation(String mzname, Integer mznumber) {
+        this.mzname = mzname;
+        this.mznumber = mznumber;
+    }
+
     public String getMzname() {
         return mzname;
     }
@@ -21,5 +29,13 @@ public class Nation {
 
     public void setMznumber(Integer mznumber) {
         this.mznumber = mznumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Nation{" +
+                "mzname='" + mzname + '\'' +
+                ", mznumber=" + mznumber +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package cn.csust.lingyi.pojo;
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * (Jl)实体类
@@ -9,7 +10,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name="jl")
-public class Jl {
+public class Jl implements Serializable {
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long jlid;
@@ -108,5 +109,21 @@ public class Jl {
 
     public void setStutype(String stutype) {
         this.stutype = stutype;
+    }
+
+    @Override
+    public String toString() {
+        return "Jl{" +
+                "jlid=" + jlid +
+                ", studentno='" + studentno + '\'' +
+                ", jlname='" + jlname + '\'' +
+                ", jllevel='" + jllevel + '\'' +
+                ", gettime='" + gettime + '\'' +
+                ", adviser='" + adviser + '\'' +
+                ", sponsor='" + sponsor + '\'' +
+                ", termorindividual='" + termorindividual + '\'' +
+                ", imagename='" + imagename + '\'' +
+                ", stutype='" + stutype + '\'' +
+                '}';
     }
 }

@@ -31,4 +31,13 @@ public class PoliticalStatus {
     public void setCounts(Integer counts) {
         this.counts = counts;
     }
+
+    @Override
+    public String toString() {
+        return "PoliticalStatus{" +
+                "psname='" + psname + '\'' +
+                ", termYear='" + termYear + '\'' +
+                ", counts=" + counts +
+                '}';
+    }
 }
