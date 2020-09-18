@@ -15,6 +15,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -289,7 +290,7 @@ public class ClassesServiceImpl implements ClassesService {
     }
 
     @Override
-    public String getClassDescriptionWorldCloud(String termYear, String major, Integer classNo) {
+    public String getClassDescriptionWordCloud(String termYear, String major, Integer classNo) {
         //添加查询条件
         Example example = new Example(Student.class);
         Example.Criteria criteria = example.createCriteria();
@@ -311,12 +312,11 @@ public class ClassesServiceImpl implements ClassesService {
             String sno = student.getStudentno();
             strings.addAll(this.personalService.getDescriptionList(sno));
         });
-        System.out.println(strings);
         //封装请求
-        HashMap<String, List<String>> requestMap = new HashMap<>();
+        HashMap<String, List<String>> requestMap = new HashMap<>(16);
         requestMap.put("data",strings);
         ResultVo resultVo = Utils.sendPost(Utils.DATA_PROCESSING_URL + "/stuwordcloud", requestMap);
-        if (resultVo.getCode().toString() == "500"){
+        if ("500".equals(resultVo.getCode().toString())){
             return "static/create_failed.png";
         }
         return  (String) resultVo.getData();

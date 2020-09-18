@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -274,5 +275,16 @@ public class ClassesController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(pageResult);
+    }
+
+    @GetMapping("wordCloud")
+    public ResponseEntity<String> getClassDescriptionWordCloud(@RequestParam("termYear") String termYear,
+                                                               @RequestParam("major") String major,
+                                                               @RequestParam("classNo") Integer classNo){
+        String imgPath = this.classesService.getClassDescriptionWordCloud(termYear, major, classNo);
+        if (StringUtils.isEmpty(imgPath) | imgPath == null){
+            return ResponseEntity.ok("create_failed");
+        }
+        return ResponseEntity.ok(imgPath);
     }
 }

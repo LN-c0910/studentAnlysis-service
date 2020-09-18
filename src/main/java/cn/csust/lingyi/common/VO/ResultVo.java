@@ -65,4 +65,14 @@ public class ResultVo<T> {
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
+
+    @Override
+    public String toString() {
+        return "ResultVo{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", createTime=" + createTime +
+                ", data=" + data +
+                '}';
+    }
 }

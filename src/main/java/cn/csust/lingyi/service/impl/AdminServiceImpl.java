@@ -37,14 +37,26 @@ public class AdminServiceImpl implements AdminService {
         return (String) resultVo.getData();
     }
 
+
     @Override
     public String del_file(String token) {
         Map<String, String> map = new HashMap<>();
-        map.put("token", "lingyi");
+        map.put("token", token);
         ResultVo resultVo = Utils.sendPost(Utils.DATA_PROCESSING_URL+"/clearpicbuffer", map);
         if (resultVo.getCode() != 200 && resultVo.getCode() != 201){
             return "ERROR";
         }
         return (String) resultVo.getData();
+    }
+
+    @Override
+    public String scoreTraining(String token) {
+        Map<String, String> map = new HashMap<>();
+        map.put("data",token);
+        ResultVo resultVo = Utils.sendPost(Utils.DATA_PROCESSING_URL + "/scoreTrain", map);
+        if (resultVo.getCode() != 200 && resultVo.getCode() != 201){
+            return "当前资源禁止访问!";
+        }
+        return "SUCCESS";
     }
 }

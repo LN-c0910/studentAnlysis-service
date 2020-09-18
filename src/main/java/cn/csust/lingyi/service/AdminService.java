@@ -14,4 +14,6 @@ public interface AdminService {
     //清理云词图
     String del_file(String token);
 
+    //学生成绩聚类训练
+    String scoreTraining(String token);
 }

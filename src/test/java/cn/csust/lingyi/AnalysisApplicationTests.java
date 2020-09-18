@@ -6,9 +6,11 @@ import cn.csust.lingyi.common.VO.ResultVo;
 import cn.csust.lingyi.common.utils.Utils;
 import cn.csust.lingyi.mapper.CourseMapper;
 import cn.csust.lingyi.mapper.StudentMapper;
+import cn.csust.lingyi.mapper.ViewScoreAnalysesMapper;
 import cn.csust.lingyi.pojo.*;
 import cn.csust.lingyi.service.ClassesService;
 import cn.csust.lingyi.service.DashboardService;
+import cn.csust.lingyi.service.GroupService;
 import cn.csust.lingyi.service.PersonalService;
 import cn.csust.lingyi.service.impl.ClassesServiceImpl;
 import com.alibaba.fastjson.JSON;
@@ -22,10 +24,13 @@ import org.springframework.web.client.RestTemplate;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.xml.ws.http.HTTPException;
+import java.beans.Transient;
 import java.net.HttpURLConnection;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @SpringBootTest(classes = AnalysisApplication.class)
 class AnalysisApplicationTests {
@@ -47,6 +52,11 @@ class AnalysisApplicationTests {
 	@Autowired
 	ClassesService classesService;
 
+	@Autowired
+	GroupService groupService;
+
+	@Autowired
+	ViewScoreAnalysesMapper viewScoreAnalysesMapper;
 
 	@Test
 	void contextLoads() {
@@ -176,11 +186,31 @@ class AnalysisApplicationTests {
 //		Integer pageResult = this.classesService.avgScoreRankOfClass("2018","2018-2019" ,"金融", 2 );
 //		System.out.println(pageResult);
 		//添加查询条件
-		String cloud = this.classesService.getClassDescriptionWorldCloud("2018", "信息管理与信息系统", 2);
-		System.out.println(cloud);
+//		String cloud = this.classesService.getClassDescriptionWorldCloud("2018", "信息管理与信息系统", 2);
+//		System.out.println(cloud);
 //		List<PoliticalStatus> pscount = this.dashboardService.pscount();
 //		System.out.println(pscount);
 
+
+	}
+
+	@Test
+	void groupServiceTest(){
+//		List<String> sno = this.viewScoreAnalysesMapper.queryTestedSnoByClass("2018", "信息管理与信息系统", 1, "2018-2019");
+//
+//		List<List<Double>> lists = this.groupService.queryScoreSignalByStu(sno);
+//		HashMap<String, List<List<Double>>> map = new HashMap<>();
+//		map.put("data",lists);
+//		ResultVo resultVo = Utils.sendPost(Utils.DATA_PROCESSING_URL + "/scoreSignal", map);
+//
+//		System.out.println(resultVo.getData());
+//		List<String> signals = (List<String>) resultVo.getData();
+//
+//		Map<String, String> collect = sno.stream().collect(Collectors.toMap(key -> key, key -> signals.get(sno.indexOf(key))));
+//
+//		System.out.println(collect);
+		List<ScoreSignal> signals = this.groupService.queryScoreSignalByClass("2018", "信息管理与信息系统", 1, "2018-2019");
+		System.out.println(signals);
 
 	}
 }

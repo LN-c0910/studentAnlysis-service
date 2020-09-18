@@ -151,6 +151,6 @@ public interface ClassesService {
      * @param classNo 班级
      * @return 图片地址
      */
-    String getClassDescriptionWorldCloud(String termYear,String major,Integer classNo);
+    String getClassDescriptionWordCloud(String termYear,String major,Integer classNo);
 
 }
